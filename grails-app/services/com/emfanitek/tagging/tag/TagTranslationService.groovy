@@ -6,7 +6,7 @@ import com.emfanitek.tagging.semantics.SemanticLink
 import static com.emfanitek.tagging.taxonomy.TaxonHelper.taxonPath
 
 class TagTranslationService {
-    def availableLocales
+    List<Locale> availableLocales
     def translationService
     def taxonomyService
     def taxonomyExtensionService

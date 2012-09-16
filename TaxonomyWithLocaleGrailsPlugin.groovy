@@ -1,4 +1,5 @@
 import com.emfanitek.tagging.instrumentation.DomainClassInstrumentation
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class TaxonomyWithLocaleGrailsPlugin {
     // the plugin version
@@ -11,15 +12,18 @@ class TaxonomyWithLocaleGrailsPlugin {
     def pluginExcludes = [
         "grails-app/views/*",
         "grails-app/controllers/*",
-        "grails-app/domain/com/emfanitek/i18n/taxonomy/test*",
+        "grails-app/domain/com/emfanitek/tagging/tests*",
+        "grails-app/services/com/emfanitek/translation/MockTranslationService*",
         "test/*"
     ]
+
+    def loadAfter = ['taxonomy']
 
     // TODO Fill in these fields
     def title = "Taxonomy With Locale Plugin"
     def author = "Luis Muniz"
     def authorEmail = "luis@emfanitek.com"
-    def description = """\
+    def description = """
 Allows to automatically translate tags added to domain objects to the configured set of locales.
 
 This plugin is based on Marc Palmer's excellent taxonomy plugin, and adds an internationalization layer on top of it.
@@ -40,6 +44,10 @@ taxonomy {
     i18n {
         //only needed if youuse the default translation service
         googleTranslateAPIKey='xxxxx'
+        availableLocales=[
+            Locale.FRANCE,
+            new Locale('fr','BE')
+        ]
     }
 }
 """
@@ -50,7 +58,7 @@ taxonomy {
     // License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "APACHE"
 
-    def organization = [ name: "Emfanitek", url: "http://www.emfanitek.com/" ]
+    def organization = [name: "Emfanitek", url: "http://www.emfanitek.com/"]
 
     // Any additional developers beyond the author specified above.
 //    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
@@ -65,33 +73,48 @@ taxonomy {
     }
 
     def doWithSpring = {
-
-        // TODO Implement runtime spring config (optional)
+        //default translation service points to google translate
+        springConfig.addAlias "translationService", "googleTranslationService"
     }
 
     def doWithDynamicMethods = { ctx ->
-        def instrumentation=new DomainClassInstrumentation(
-            searchService: ctx.
-        )
-        // TODO Implement registering dynamic methods to classes (optional)
+        applyDynamicMethods(application)
+        applyPluginConfigurationOptions()
     }
 
     def doWithApplicationContext = { applicationContext ->
-        // TODO Implement post initialization spring config (optional)
     }
 
     def onChange = { event ->
-        // TODO Implement code that is executed when any artefact that this plugin is
-        // watching is modified and reloaded. The event contains: event.source,
-        // event.application, event.manager, event.ctx, and event.plugin.
+        applyDynamicMethods(application)
     }
 
     def onConfigChange = { event ->
-        // TODO Implement code that is executed when the project configuration changes.
-        // The event is the same as for 'onChange'.
+        applyPluginConfigurationOptions()
     }
 
     def onShutdown = { event ->
-        // TODO Implement code that is executed when the application shuts down (optional)
     }
+
+    void applyDynamicMethods(GrailsApplication application) {
+        def ctx = application.mainContext
+        def taggingService = ctx.taggingService
+        def searchService = ctx.searchService
+        def instrumentation = new DomainClassInstrumentation(
+            searchService: searchService,
+            taggingService: taggingService
+        )
+
+        application.domainClasses*.clazz.each { c ->
+            instrumentation.instrument(c)
+        }
+    }
+
+    void applyPluginConfigurationOptions() {
+        def ctx = application.mainContext
+        def cfg = application.config
+
+        ctx.tagTranslationService.availableLocales = cfg.taxonomy.i18n.availableLocales
+    }
+
 }
