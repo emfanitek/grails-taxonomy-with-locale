@@ -3,6 +3,7 @@ package com.emfanitek.tagging.tag
 import com.grailsrocks.taxonomy.Taxon
 import com.emfanitek.tagging.semantics.SemanticLink
 
+import static com.emfanitek.tagging.taxonomy.TaxonHelper.taxonPath
 
 class TagTranslationService {
     def availableLocales
@@ -35,7 +36,7 @@ class TagTranslationService {
         targetLocales.each {Locale target ->
             String translated = translationService.translate(semanticLink.tag, semanticLink.localeObj, target)
             if (translated != null) {
-                semanticLink.addToTaxonomy(taxotests.taxonomy.TaxonHelper.taxonPath(target, translated))
+                semanticLink.addToTaxonomy(taxonPath(target, translated))
             }
         }
     }
@@ -43,7 +44,7 @@ class TagTranslationService {
     public <T> Collection<T> findAllObjectsByTags(Class<T> objClass, Locale locale, Collection<String> tags) {
         def taxonIdList = tags.collect {t ->
             String localeAsString = locale.toString()
-            taxonomyService.resolveTaxon(taxotests.taxonomy.TaxonHelper.taxonPath(localeAsString, t))?.id
+            taxonomyService.resolveTaxon(taxonPath(localeAsString, t))?.id
         }
 
         taxonomyExtensionService.getObjectsForTaxonIds(objClass, taxonIdList, [:])
@@ -51,7 +52,7 @@ class TagTranslationService {
 
     SemanticLink createSemanticLink(Locale locale, String tag) {
         def semanticLink = new SemanticLink(locale: locale.toString(), tag: tag).save()
-        semanticLink.addToTaxonomy(taxotests.taxonomy.TaxonHelper.taxonPath(locale, tag))
+        semanticLink.addToTaxonomy(taxonPath(locale, tag))
         semanticLink
     }
 
@@ -62,7 +63,7 @@ class TagTranslationService {
     }
 
     SemanticLink findSemanticLink(Locale referenceLocale, String tag) {
-        def taxon = taxonomyService.resolveTaxon(taxotests.taxonomy.TaxonHelper.taxonPath(referenceLocale, tag))
+        def taxon = taxonomyService.resolveTaxon(taxonPath(referenceLocale, tag))
         if (taxon == null) {
             null
         } else {
@@ -71,7 +72,7 @@ class TagTranslationService {
     }
 
     private SemanticLink findSemanticLink(Taxon taxon) {
-        List relatedSemanticLinks = taxonomyService.findObjectsByTaxon(SemanticLink, taxotests.taxonomy.TaxonHelper.taxonPath(taxon.parent.name, taxon.name))
+        List relatedSemanticLinks = taxonomyService.findObjectsByTaxon(SemanticLink, taxonPath(taxon.parent.name, taxon.name))
         if (relatedSemanticLinks.empty) {
             null
         } else {
