@@ -36,7 +36,7 @@ static findAllByTags(Locale,Collection<String>) returns a list of domain objects
 
 The plugin uses a TranslationService to translate phrases from a source locale to a target locale.
 
-Currently, the default implementation, which can be overridden by providing a suitable TranslationService in the spring context, is a GoogleTranslationService (needs a paying Google Translate API key)
+Currently, the default implementation, which can be overridden by providing a suitable Translator in the spring context, is a GoogleTranslationService (needs a paying Google Translate API key)
 
 Following Config entries are currently needed:
 

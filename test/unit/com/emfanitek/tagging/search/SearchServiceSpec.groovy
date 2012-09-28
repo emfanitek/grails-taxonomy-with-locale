@@ -1,5 +1,13 @@
 package com.emfanitek.tagging.search
 
+import com.emfanitek.tagging.semantics.SemanticLink
+import com.grailsrocks.taxonomy.Taxon
+import com.grailsrocks.taxonomy.TaxonLink
+import com.grailsrocks.taxonomy.Taxonomy
+import grails.test.mixin.Mock
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+
 import static java.util.Locale.FRANCE
 import static java.util.Locale.UK
 import com.emfanitek.tagging.tests.di.Initializer
@@ -8,11 +16,16 @@ import com.emfanitek.tagging.tests.specification.SpecificationSupport
 import com.emfanitek.tagging.tests.TestDomainClass2
 import com.emfanitek.tagging.tests.TestDomainClass1
 
+@TestMixin(GrailsUnitTestMixin)
+@Mock([TestDomainClass1, TestDomainClass2, SemanticLink, Taxon, Taxonomy, TaxonLink])
 class SearchServiceSpec extends SpecificationSupport {
     SearchService searchService
     def taggingService
 
     def setup() {
+        o1 = new TestDomainClass1(name: 'o1').save()
+        o2 = new TestDomainClass1(name: 'o2').save()
+
         new Initializer().initialize(
             ['searchService', 'taggingService'],
             this

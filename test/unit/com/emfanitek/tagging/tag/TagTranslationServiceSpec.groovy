@@ -1,5 +1,14 @@
 package com.emfanitek.tagging.tag
 
+import com.emfanitek.tagging.tests.TestDomainClass1
+import com.emfanitek.tagging.tests.TestDomainClass2
+import com.grailsrocks.taxonomy.Taxon
+import com.grailsrocks.taxonomy.TaxonLink
+import com.grailsrocks.taxonomy.Taxonomy
+import grails.test.mixin.Mock
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+
 import static java.util.Locale.*
 
 import com.emfanitek.tagging.tests.di.Initializer
@@ -9,6 +18,8 @@ import com.emfanitek.tagging.semantics.SemanticLink
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
+@TestMixin(GrailsUnitTestMixin)
+@Mock([TestDomainClass1, TestDomainClass2, SemanticLink, Taxon, Taxonomy, TaxonLink])
 class TagTranslationServiceSpec extends SpecificationSupport {
     final static String T1_GERMAN = 'Hallo'
     final static String T1_UK = 'Hello'
@@ -23,6 +34,9 @@ class TagTranslationServiceSpec extends SpecificationSupport {
     def taggingService
 
     void setup() {
+        o1 = new TestDomainClass1(name: 'o1').save()
+        o2 = new TestDomainClass1(name: 'o2').save()
+
         new Initializer().initialize(
             ['tagTranslationService','taggingService'],
             this

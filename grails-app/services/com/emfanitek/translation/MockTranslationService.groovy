@@ -3,7 +3,7 @@ package com.emfanitek.translation
 import static java.util.Locale.UK as L_UK
 import static java.util.Locale.FRANCE as L_FR
 
-class MockTranslationService implements TranslationService {
+class MockTranslationService implements Translator {
     private static Locale L_SPAIN = new Locale('es', 'ES')
     private static String SPAIN = L_SPAIN.toString()
     private static String UK = L_UK.toString()

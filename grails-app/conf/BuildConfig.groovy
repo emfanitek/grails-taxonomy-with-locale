@@ -28,17 +28,22 @@ grails.project.dependency.resolution = {
 
     plugins {
         build(":tomcat:$grailsVersion",
-            ":release:2.0.3",
-            ":rest-client-builder:latest.integration") {
+            ":release:2.0.3") {
             export = false
+            excludes 'groovy'
         }
 
         compile(
-            ":taxonomy:latest.integration"
-        )
+            ":taxonomy:latest.integration",
+            ":rest-client-builder:latest.integration"
+        ){
+            export = false
+            excludes 'groovy'
+        }
 
         test(":spock:0.6") {
             export = false
+            excludes 'groovy'
         }
     }
 }

@@ -3,7 +3,7 @@ package com.emfanitek.translation
 import grails.plugins.rest.client.RestBuilder
 import org.codehaus.groovy.grails.plugins.codecs.HTMLCodec
 
-class GoogleTranslationService implements TranslationService {
+class GoogleTranslationService implements Translator {
     static transactional = false
     String googleKey = 'AIzaSyCeUlsaB1k3a5BDb7YDbSYK1ODxBub8CHE'
 

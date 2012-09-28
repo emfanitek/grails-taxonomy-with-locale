@@ -1,13 +1,23 @@
 package com.emfanitek.tagging.instrumentation
 
+import com.emfanitek.tagging.semantics.SemanticLink
+import com.emfanitek.tagging.tests.TestDomainClass2
 import com.emfanitek.tagging.tests.specification.SpecificationSupport
 import com.emfanitek.tagging.tag.TaggingService
 import com.emfanitek.tagging.search.SearchService
 import com.emfanitek.tagging.tests.TestDomainClass1
+import com.grailsrocks.taxonomy.Taxon
+import com.grailsrocks.taxonomy.TaxonLink
+import com.grailsrocks.taxonomy.Taxonomy
+import grails.test.mixin.Mock
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
 
 /**
  * lmuniz (9/15/12 8:30 PM)
  */
+@TestMixin(GrailsUnitTestMixin)
+@Mock([TestDomainClass1, TestDomainClass2, SemanticLink, Taxon, Taxonomy, TaxonLink])
 class DomainClassInstrumentationSpec extends SpecificationSupport {
     def mockTaggingService
     def mockSearchService

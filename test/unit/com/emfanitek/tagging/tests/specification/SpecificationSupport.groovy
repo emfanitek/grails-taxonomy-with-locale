@@ -18,9 +18,7 @@ import com.emfanitek.tagging.semantics.SemanticLink
 /**
  * lmuniz (9/14/12 11:50 AM)
  */
-@TestMixin(GrailsUnitTestMixin)
-@Mock([TestDomainClass1, TestDomainClass2, SemanticLink, Taxon, Taxonomy, TaxonLink])
-class SpecificationSupport extends Specification {
+abstract class SpecificationSupport extends Specification {
     protected static final String BY_LOCALE = 'by_locale'
     protected o1
     protected o2
@@ -36,8 +34,6 @@ class SpecificationSupport extends Specification {
         def appender=new ConsoleAppender(new SimpleLayout())
         logger.addAppender(appender)
 
-        o1 = new TestDomainClass1(name: 'o1').save()
-        o2 = new TestDomainClass1(name: 'o2').save()
     }
 
     protected Set allTags(obj) {
