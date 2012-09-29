@@ -4,7 +4,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 class TaxonomyWithLocaleGrailsPlugin {
     def groupId='com.emfanitek'
     // the plugin version
-    def version = "0.1b"
+    def version = "0.1-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.1 > *"
     // the other plugins this plugin depends on
@@ -80,7 +80,7 @@ taxonomy {
 
     def doWithDynamicMethods = { ctx ->
         applyDynamicMethods(application)
-        applyPluginConfigurationOptions()
+        applyPluginConfigurationOptions(application)
     }
 
     def doWithApplicationContext = { applicationContext ->
@@ -91,7 +91,7 @@ taxonomy {
     }
 
     def onConfigChange = { event ->
-        applyPluginConfigurationOptions()
+        applyPluginConfigurationOptions(application)
     }
 
     def onShutdown = { event ->
@@ -111,7 +111,7 @@ taxonomy {
         }
     }
 
-    void applyPluginConfigurationOptions() {
+    void applyPluginConfigurationOptions(GrailsApplication application) {
         def ctx = application.mainContext
         def cfg = application.config
 
