@@ -2,7 +2,7 @@ import com.emfanitek.tagging.instrumentation.DomainClassInstrumentation
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class TaxonomyWithLocaleGrailsPlugin {
-    def groupId='com.emfanitek'
+    def groupId = 'com.emfanitek'
     // the plugin version
     def version = "0.1-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
@@ -24,7 +24,10 @@ class TaxonomyWithLocaleGrailsPlugin {
     def title = "Taxonomy With Locale Plugin"
     def author = "Luis Muniz"
     def authorEmail = "luis@emfanitek.com"
-    def description = """
+    def description = usage()
+
+    private String usage() {
+        """
 Allows to automatically translate tags added to domain objects to the configured set of locales.
 
 This plugin is based on Marc Palmer's excellent taxonomy plugin, and adds an internationalization layer on top of it.
@@ -43,7 +46,7 @@ Following Config entries are currently needed:
 
 taxonomy {
     i18n {
-        //only needed if youuse the default translation service
+        //only needed if you use the default translation service
         googleTranslateAPIKey='xxxxx'
         availableLocales=[
             Locale.FRANCE,
@@ -52,6 +55,7 @@ taxonomy {
     }
 }
 """
+    }
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/taxonomy-with-locale"
@@ -111,9 +115,21 @@ taxonomy {
         }
     }
 
+    void checkMandatoryConfiguration(ConfigObject taxonomyConfig) {
+        def availableLocales = taxonomyConfig.i18n.availableLocales
+        try {
+            assert availableLocales instanceof Collection
+            assert !availableLocales.empty
+        } catch (Throwable e) {
+            log.error("Plugin configuration error:${e.message}\nPlease check the configuration of the taxonomi18n plugin:\n${usage()}",e)
+        }
+    }
+
     void applyPluginConfigurationOptions(GrailsApplication application) {
         def ctx = application.mainContext
         def cfg = application.config
+
+        checkMandatoryConfiguration(cfg.taxonomy)
 
         ctx.tagTranslationService.availableLocales = cfg.taxonomy.i18n.availableLocales
     }
