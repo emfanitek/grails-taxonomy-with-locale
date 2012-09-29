@@ -2,8 +2,9 @@ import com.emfanitek.tagging.instrumentation.DomainClassInstrumentation
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class TaxonomyWithLocaleGrailsPlugin {
+    def groupId='com.emfanitek'
     // the plugin version
-    def version = "0.1"
+    def version = "0.1b"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.1 > *"
     // the other plugins this plugin depends on
@@ -12,8 +13,8 @@ class TaxonomyWithLocaleGrailsPlugin {
     def pluginExcludes = [
         "grails-app/views/*",
         "grails-app/controllers/*",
-        "grails-app/domain/com/emfanitek/tagging/tests*",
-        "grails-app/services/com/emfanitek/translation/MockTranslationService*",
+        "grails-app/domain/com/emfanitek/tagging/tests/*",
+        "grails-app/services/com/emfanitek/translation/MockTranslationService.groovy",
         "test/*"
     ]
 
